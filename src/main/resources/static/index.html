@@ -4,95 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>URL Shortener</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="https://unpkg.com/augmented-ui@2/augmented-ui.css"
-    />
-    <script
-      type="text/javascript"
-      src="https://unpkg.com/aug-attr-spliced/aug-attr-spliced.js"
-    ></script>
     <link rel="stylesheet" type="text/css" href="./index.css" />
+    <link rel="stylesheet" type="text/css" href="./glitch.css" />
   </head>
   <body>
     <header>
-      <div class="headsection">
-        <div class="headline">
-          <h1>
-            Generate Short Url
-            <em class="glitch" data-text="Aliases">Aliases</em>
-          </h1>
-        </div>
+      <div class="headline">
+        <h1>
+          Generate Short URL
+          <em class="glitch" data-text="Aliases">Aliases</em>
+        </h1>
       </div>
     </header>
 
     <section>
-      <form
-        id="myform"
-        name="myform"
-        action="javascript:getSubList()"
-        autocomplete="off"
-      >
-        <div class="wrapper">
-          <div class="label-wrapper">
-            <span class="label">URL</span>
-            <input type="text" name="url" />
-          </div>
-          <br /><br />
-          <div class="label-wrapper">
-            <span class="label">Alias</span>
-            <input type="text" name="alias" />
-          </div>
+      <form id="shortenerForm" autocomplete="off">
+        <div class="label-wrapper">
+          <span class="label">URL</span>
+          <input type="text" name="url" />
         </div>
-        <br />
-        <input
-          class="button"
-          type="submit"
-          value="Generate"
-          augmented-ui="l-clip-y br-clip exe"
-        />
+        <div class="label-wrapper">
+          <span class="label">Alias</span>
+          <input type="text" name="alias" />
+        </div>
+        <input class="button" type="submit" value="Generate" />
       </form>
 
-      <br /><br />
-
-      <div
-        id="msg-container"
-        class="step step-css"
-        data-augmented-ui="tl-clip-x tr-clip-x bl-clip-x br-clip-x border"
-      >
-        Leave Alias empty to generate a random one.
-      </div>
-
-      <div data-augmented-ui="all-hexangle-up border" class="reticle"></div>
-
-      <div data-augmented-ui="tl-clip-x br-clip b-rect border">fwefe</div>
+      <div id="msgContainer">Leave Alias empty to generate a random one.</div>
     </section>
 
     <script>
-      var form = document.getElementById("myform");
+      var form = document.getElementById("shortenerForm");
+      const url = "https://shortify-me.herokuapp.com/";
 
       function handleForm(event) {
         event.preventDefault();
 
-        document.getElementById("msg-container").innerText = "rge";
-
-        fetch("http://localhost:8080/", {
+        fetch(url, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
           },
+          mode: "cors",
           method: "POST",
           body: JSON.stringify({
-            url: myform.url.value,
-            alias: myform.alias.value,
+            url: shortenerForm.url.value,
+            alias: shortenerForm.alias.value,
           }),
         })
           .then((response) => response.json())
           .then(
             (data) =>
-              (document.getElementById("msg-container").innerText =
-                data.message)
+              (document.getElementById("msgContainer").innerText = data.message)
           );
       }
 
